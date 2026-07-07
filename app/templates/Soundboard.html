@@ -1,0 +1,80 @@
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<header class="topbar">
+
+    <!-- LEFT: logo -->
+    <div class="left">
+        <div class="logo">
+            <img src="{{ url_for('static', filename='logo.png') }}" class="logo">
+        </div>
+    </div>
+
+    <!-- CENTER: title -->
+    <div class="center">
+        <h1>Soundboard</h1>
+    </div>
+
+    <!-- RIGHT: controls -->
+    <div class="right">
+
+        <!-- Volume control -->
+        <div class="volume-control">
+            <input type="range" id="volumeSlider" min="0" max="100" value="100">
+            <input type="number" id="volumeInput" min="0" max="100" value="100">
+        </div>
+
+        <!-- Search -->
+        <input type="text" id="searchBar" placeholder="Search sounds...">
+
+    </div>
+
+</header>
+
+<body>
+    <div id="soundGrid">
+
+        <div class="sound-card tts-card" data-sound="tts" style="grid-column: 1 / -1; order: -1; width: 100%; box-sizing: border-box;">
+            <div class="sound-header">
+                <div class="sound-name">Text to Speech</div>
+            </div>
+
+            <textarea id="ttsText" rows="3" placeholder="Type something to say..."></textarea>
+
+            <button id="ttsSpeakBtn" class="play-btn">Speak</button>
+
+            <div class="volume-row">
+                <input type="range" id="ttsVolumeSlider" min="0" max="100" value="100">
+                <input type="number" id="ttsVolumeInput" class="volume-input" min="0" max="100" value="100">
+            </div>
+        </div>
+
+        {% for sound in sounds %}
+        <div class="sound-card" data-sound="{{ sound }}">
+
+            <div class="sound-header">
+                <div class="sound-name">
+                    {{ sound.replace('.mp3', '') }}
+                </div>
+
+                <button onclick="playSound('{{ sound }}')">
+                    ▶
+                </button>
+            </div>
+
+            <div class="volume-row">
+                <input type="range"
+                    min="0" max="100" value="100"
+                    oninput="setSoundVolume('{{ sound }}', this.value)">
+
+                <input type="number"
+                    min="0" max="100" value="100"
+                    oninput="setSoundVolume('{{ sound }}', this.value)">
+            </div>
+
+        </div>
+        {% endfor %}
+
+    </div>
+</body>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
